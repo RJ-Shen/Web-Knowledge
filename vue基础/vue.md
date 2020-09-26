@@ -28,15 +28,18 @@ v-bind="msg", 起初data中的msg变量会使视图显示的内容，然后你�
 ## 组件
 
 局部组件不能在其子组件内使用，如果要使用就需要使用
+```javascript
 var componentA = {}
 var componentB = {
     components: {
         'component-a':componentA
     }
 }
-
+```
 全局组件声明完就挂在根app上了，就可以在任何组件内使用。
+```javascript
 Vue.component('ComponentC',{})
+```
 
 ### 父子组件的传值
 
@@ -74,13 +77,12 @@ App给C传值 ，给A组件使用 v-bind的方式进行传值，则也是在A内
 ## 过滤器
 
 局部过滤器
-在组件内部使用filters{myfilter(){return ''}}定义一个过滤器。使用 {{value | myfilters}}
+> 在组件内部使用filters{myfilter(){return ''}}定义一个过滤器。使用 {{value | myfilters}}
 全局过滤器
-
-Vue.filter('filtername',function(value){})
+> Vue.filter('filtername',function(value){})
 
 ## watch 监听
-
+```javascript
 watch: {
     监听基本类型属性: function(newvalue,oldvalue){
 
@@ -90,15 +92,15 @@ watch: {
     数组/对象类型 {
     deep: true,
     handler: function(newvalue,oldvalue){
-
+        }
     }
-    }
-
 }
+```
 
 ## 计算属性
 
-computed是一个对象，默认返回的是一个getter方法。即 getIndex: function(){return 监听的对象}
+computed是一个对象，默认返回的是一个getter方法。
+> 即 getIndex: function(){return 监听的对象}
 
 ## 生命周期钩子
 
@@ -120,7 +122,7 @@ destroyed
 
 ### vue中获取DOM元素
 使用 ref属性来获取原生DOM对象，但是在mounted钩子才能找到
-<button ref='btn'> console.log(this.$refs.btn)
+ > <button ref='btn'> console.log(this.$refs.btn)
 
 如果是给组件绑定的ref，那么this.refs获取的是当前的组件对象
 
@@ -132,6 +134,7 @@ destroyed
 在非模块开发的时候，Vue.use(VueRouter)可写可不写，因为源码中就有写
 
 2. 使用的时候
+```javascript
 var router = new VueRouter({
     routes:[
         {path:'login',
@@ -143,6 +146,7 @@ var router = new VueRouter({
         }
     ]
 })
+```
 在new Vue 的组件内挂载， router 
 vue-router 抛出两个全局组件，
 router-link --> 相当于 a,其中 to===href 
@@ -171,6 +175,7 @@ $router 就是 VueRouter对象
 在组件内还有组件内容
 在该组件内使用<router-link to="home/song">
 路由定义位
+```javascript
 {
     path:'/home',
     name:'home',
@@ -181,6 +186,7 @@ $router 就是 VueRouter对象
     }]
 }
 
+```
 6. 当不同的params渲染的是同一个组件的时候，原来的组件会被复用，因为两个路由渲染着同个组件，比起销毁再创建，复用则会显得更有效果，这也意味着生命周期钩子不会再被调用。
 <router-link :to="{name:'comDesc', params:{id:'frontend'}}">前端 </router-link>
 <router-link :to="{name:'comDesc', params:{id:'backend'}}">后端 </router-link>
@@ -192,7 +198,7 @@ watch进行监听。watch:{'$route'(to,from){}}
 7. keep-alive, 是将组件缓存起来。本来组件点击切换的过程就有重新创造和销毁的过程，但是如果使用keep-alive以后就不会重新创建和修改
 
 8. 重定向 redirect:'/home'
- { path: '/', redirect: '/home'} 当访问 ‘/’的时候就会重定向到'/home'
+ > { path: '/', redirect: '/home'} 当访问 ‘/’的时候就会重定向到'/home'
 
 9. meta 做用户认证的时候使用
 在路由切换的时候使用全局守卫beforeEach()
@@ -223,6 +229,7 @@ webpack ./main.js build.js,这样就实现了打包，其中build.js是编译以
 （6）最终return module.exports作为require函数的返回值
 
 4. 自动编译webpack，配置一个webpack.config.js文件，文件内容为
+```javascript
 module.exports = {
     // 入口，可以有多个入口
     entry: {
@@ -233,10 +240,11 @@ module.exports = {
     },
     watch:true, // 问价监视改动自动产生build.js
 } 
+```
 webpack 其他config的配置
 在package.json中配置
-"dev": "webpack --config ./webpack.dev.config.js",
-"prod":"webpack --config ./webpack.prod.config.js"
+> "dev": "webpack --config ./webpack.dev.config.js",
+> "prod":"webpack --config ./webpack.prod.config.js"
 
 在cmd中执行 npm run dev 或者 npm run prod就可以
 
@@ -247,6 +255,7 @@ loader，对于css文件和js文件需要 style-loader css-loader
 [解析css使用的是style-loader和css-laoder]
 [对于比较小的文件建议使用base-64编码]
 配置loader的时候
+```javascript
 module:[
     {
         rules:[
@@ -265,11 +274,12 @@ module:[
         ]
     }
 ]
+```
 'url-loader?limit=60000'当图片大小小于限制的就会认为是一张小图，就会生成base64,大于的时候就会编码和html混合在一起，加大了html文件的大小
 
 配置less-loader的时候非常麻烦，需要先下载less
 然后配置的时候还要一起配置style-loader和css-loader
-
+```javascript
 {
     test:/\.less$/,
     use:[
@@ -278,6 +288,7 @@ module:[
      'less-loader'
     ]
 }
+```
 ### webpack-dev-server 
 -open 自动打开浏览器
 -hot 热更新，在不刷新的时候替换css
@@ -295,6 +306,7 @@ module:[
  babel不能解析iterator、generator、set、map、Symbol、Promise等内容，需要使用babel-plugin-transform-runtime
  还要下载依赖包babel-core 以及babel-preset-env
 ,然后配置babel的loader部分
+```javascript
 {
             test:/\.js$/,
             exclude:/node_modules/,
@@ -306,14 +318,16 @@ module:[
               }}
             ]
           }
-
+```
 ### 单文件引入
 
 引入.vue格式的组件，需要在module的rules里边进行相应的配置
+```javascript
 {
     test:/\.vue$/
     use:['vue-loader']
 }
+```
 在入口函数main.js中需要使用运行时编译，即render:c=>c(Components)
 
 ### chunk

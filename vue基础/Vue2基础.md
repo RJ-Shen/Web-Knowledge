@@ -78,13 +78,13 @@ Vue.directive('n', {
 ### 路由基础
 第一步安装路由 npm i vue-router
 配置 --使用的是ES6语法
-
-引入
+```javascript
+//引入
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
 
-配置
+//配置
 const routes = [
     {
         path:'/',
@@ -96,22 +96,24 @@ const routes = [
     }
 ]
 
-实例化
+// 实例化
 const router = new VueRouter({
     routes
 })
 
-导出
+//导出
 export default router
-
+```
 路由的实例化使用
 最后使用的时候还是要去main.js中的new Vue({})中进行配置
 
 只在new Vue({router})中配置以后，其实vue-router这时候是运行时的，要把配置文件给配置上。
 在根目录下创建一个 vue.config.js 然后配置其编译器 
+```javascript
 module.exports = {
     runtimeCompiler: true
 }
+```
 然后找index.html 在挂在的app内使用<router-veiw></router-veiw>标签
 # Koa2的基础
 此处的安装应该使用gitbash
@@ -140,6 +142,7 @@ app.use(json()) 即可
 创建一个文件 touch 文件.类型
 
 写一个中间件
+```javascript
 function pv(ctx) { 
     global.console.log(ctx.path)
  }
@@ -149,6 +152,7 @@ function pv(ctx) {
          await next()
       }
   }
+  ```
 首先 ctx ，ctx是一个全局的控制变量，koa2的中间件就想是一个洋葱，从一个中间件进入另一个中间件，一级一级进入，然后再一级一级的出去。
 所以需要一个全局对象，使得在任何一个中间件内都能取到。ctx就是这个对象
 然后是导出。为什么导出的是一个函数呢
@@ -157,20 +161,24 @@ function pv(ctx) {
 返回的就是一个异步函数。next()交给另一个中间件处理
 ## koa-router
 主页的 路由是使用
+```javascript
 router.get('/', async (ctx, next) => {
   await ctx.render('index', {
     title: 'Hello Koa 2!'
   })
 })
+```
 其他页面的路由只需要提供给一个接口就行
 接口的提供方式是ctx.body = {}
 其他的模块的路由可以模块封装
 使用router.prefix('/users')
 这个的例子是封装了一个users模块的路由。
 里面的/user/bar 什么的就使用正常的模式书写
+```javascript
 router.get('/bar', function (ctx, next) {
   ctx.body = 'this is a users/bar response'
 })
+```
 对于其他模块的分装的路由先要引入 require
 然后
 app.use(users.routes(), users.allowedMethods())
